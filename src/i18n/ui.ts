@@ -11,9 +11,9 @@ export const ui: Record<Locale, Record<string, string>> = {
     // Home
     "home.title": "Home",
     "home.hero.greeting": "Hi, I'm",
-    "home.hero.name": "IceHome",
+    "home.hero.name": "Ice",
     "home.hero.description":
-      "A developer who loves building things for the web. Welcome to my personal corner of the internet.",
+      "I am a software engineer, and want to find the next MEGA trend to ride on. There's lots of things I want to share with, including my study notes, projects,and some of my personal mindset. Hope this place can somehow impact you in a positive way. :D",
     "home.hero.cta": "Read my blog",
     "home.latest": "Latest Posts",
     "home.viewAll": "View all posts",
@@ -44,7 +44,7 @@ export const ui: Record<Locale, Record<string, string>> = {
     "404.backHome": "Go back home",
 
     // SEO
-    "seo.siteName": "IceHome",
+    "seo.siteName": "Ice",
     "seo.defaultDescription":
       "Personal website and blog — web development, tutorials, and projects.",
   },
@@ -57,10 +57,10 @@ export const ui: Record<Locale, Record<string, string>> = {
 
     // Home
     "home.title": "首頁",
-    "home.hero.greeting": "你好，我是",
-    "home.hero.name": "IceHome",
+    "home.hero.greeting": "Hi, im",
+    "home.hero.name": "Ice",
     "home.hero.description":
-      "一位熱愛構建 Web 應用的開發者。歡迎來到我的個人網站。",
+      "一位軟體工程師，正在持續尋找下一個大趨勢。 希望這裡分享的事，可以 somehow impact 到你。",
     "home.hero.cta": "閱讀部落格",
     "home.latest": "最新文章",
     "home.viewAll": "查看全部文章",
@@ -82,8 +82,8 @@ export const ui: Record<Locale, Record<string, string>> = {
     "about.description": "了解更多關於我的資訊。",
 
     // Footer
-    "footer.builtWith": "使用",
-    "footer.rights": "保留所有權利。",
+    "footer.builtWith": "Built with",
+    "footer.rights": "All rights reserved.",
 
     // 404
     "404.title": "頁面未找到",
@@ -91,7 +91,7 @@ export const ui: Record<Locale, Record<string, string>> = {
     "404.backHome": "返回首頁",
 
     // SEO
-    "seo.siteName": "IceHome",
+    "seo.siteName": "Ice",
     "seo.defaultDescription":
       "個人網站和部落格 — Web 開發、教學和專案。",
   },
