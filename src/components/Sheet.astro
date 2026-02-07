@@ -1,0 +1,57 @@
+---
+
+---
+
+<style>
+  .sheet-toggle:checked ~ .sheet-overlay {
+    display: block;
+  }
+  .sheet-toggle:checked ~ .sheet-panel {
+    transform: translateX(0);
+  }
+</style>
+
+<input type="checkbox" id="mobile-menu" class="sheet-toggle hidden peer" />
+
+<!-- Overlay -->
+<label
+  for="mobile-menu"
+  class="sheet-overlay fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm"
+></label>
+
+<!-- Panel -->
+<div
+  class="sheet-panel fixed inset-y-0 right-0 z-50 w-72 translate-x-full bg-background border-l border-border p-6 shadow-lg transition-transform duration-300 ease-in-out"
+>
+  <label
+    for="mobile-menu"
+    class="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="h-5 w-5"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M6 18 18 6M6 6l12 12"></path>
+    </svg>
+  </label>
+
+  <nav class="mt-8 flex flex-col gap-4">
+    <slot />
+  </nav>
+</div>
+
+<script is:inline>
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const cb = document.getElementById("mobile-menu");
+      if (cb) cb.checked = false;
+    }
+  });
+</script>

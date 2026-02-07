@@ -1,0 +1,28 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import { useTranslation } from "@/i18n/utils";
+
+const locale = "en";
+const t = useTranslation(locale);
+---
+
+<PageLayout title={t("about.title")} description={t("about.description")} locale={locale}>
+  <div class="max-w-2xl space-y-8">
+    <h1 class="text-4xl font-bold tracking-tight">{t("about.title")}</h1>
+    <div class="prose dark:prose-invert">
+      <p>
+        Hi! I'm a developer passionate about building things on the web.
+        I enjoy working with modern tools and frameworks to create fast,
+        accessible, and beautiful experiences.
+      </p>
+      <p>
+        This site is built with Astro and Tailwind CSS, deployed on Cloudflare Pages.
+        It supports both English and Chinese, and features a dark mode toggle.
+      </p>
+      <p>
+        Feel free to explore my blog and projects. If you'd like to get in touch,
+        you can find me on GitHub.
+      </p>
+    </div>
+  </div>
+</PageLayout>

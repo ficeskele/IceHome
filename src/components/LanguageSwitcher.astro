@@ -1,0 +1,16 @@
+---
+import type { Locale } from "@/i18n/locales";
+import { localeLabels } from "@/i18n/locales";
+import { getLocaleFromPath, getLocalizedPath } from "@/i18n/utils";
+
+const currentLocale = getLocaleFromPath(Astro.url.pathname);
+const targetLocale: Locale = currentLocale === "en" ? "zh" : "en";
+const targetPath = getLocalizedPath(Astro.url.pathname, targetLocale);
+---
+
+<a
+  href={targetPath}
+  class="inline-flex h-10 items-center justify-center rounded-md px-3 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+>
+  {localeLabels[targetLocale]}
+</a>

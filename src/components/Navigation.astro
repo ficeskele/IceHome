@@ -1,0 +1,80 @@
+---
+import Container from "./Container.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import Sheet from "./Sheet.astro";
+import { getLocaleFromPath } from "@/i18n/utils";
+import { useTranslation } from "@/i18n/utils";
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const t = useTranslation(locale);
+
+const links = [
+  { label: t("nav.home"), href: `/${locale}` },
+  { label: t("nav.blog"), href: `/${locale}/blog` },
+  { label: t("nav.projects"), href: `/${locale}/projects` },
+  { label: t("nav.about"), href: `/${locale}/about` },
+];
+---
+
+<header class="sticky top-0 z-30 w-full border-b border-border bg-background/80 backdrop-blur-md">
+  <Container>
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo -->
+      <a href={`/${locale}`} class="text-lg font-bold tracking-tight">
+        IceHome
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        {links.map((link) => (
+          <a
+            href={link.href}
+            class="inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+          >
+            {link.label}
+          </a>
+        ))}
+        <LanguageSwitcher />
+        <ThemeToggle />
+      </nav>
+
+      <!-- Mobile controls -->
+      <div class="flex items-center gap-1 md:hidden">
+        <LanguageSwitcher />
+        <ThemeToggle />
+        <label
+          for="mobile-menu"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-5 w-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 9h16.5m-16.5 6.75h16.5"
+            ></path>
+          </svg>
+        </label>
+      </div>
+    </div>
+  </Container>
+
+  <!-- Mobile Sheet -->
+  <Sheet>
+    {links.map((link) => (
+      <a
+        href={link.href}
+        class="text-lg font-medium text-foreground hover:text-muted-foreground transition-colors"
+      >
+        {link.label}
+      </a>
+    ))}
+  </Sheet>
+</header>

@@ -1,0 +1,198 @@
+---
+import SEOHead from "@/components/SEOHead.astro";
+import type { Locale } from "@/i18n/locales";
+import "@/styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  locale: Locale;
+  image?: string;
+}
+
+const { title, description, locale, image } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale} class="scroll-smooth">
+  <head>
+    <script is:inline>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        if (
+          theme === "dark" ||
+          (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+    <SEOHead title={title} description={description} locale={locale} image={image} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style is:inline>
+      body { font-family: 'Inter', system-ui, sans-serif; }
+    </style>
+  </head>
+  <body class="min-h-screen antialiased">
+    <slot />
+    <script is:inline>
+      (function () {
+        const toggleSelector = "[data-theme-toggle]";
+        let cleanupSnapshot = null;
+        let cleanupGlow = null;
+
+        function updateToggleState() {
+          const isDark = document.documentElement.classList.contains("dark");
+          document.querySelectorAll(toggleSelector).forEach((button) => {
+            button.setAttribute("aria-pressed", isDark ? "true" : "false");
+          });
+        }
+
+        function createThemeSnapshot(snapshotIsDark) {
+          document
+            .querySelectorAll(".theme-transition-snapshot")
+            .forEach((snapshot) => snapshot.remove());
+
+          const snapshot = document.createElement("div");
+          snapshot.className = "theme-transition-snapshot";
+          snapshot.dataset.theme = snapshotIsDark ? "dark" : "light";
+          snapshot.setAttribute("aria-hidden", "true");
+          if (snapshotIsDark) {
+            snapshot.classList.add("dark");
+          }
+
+          const content = document.createElement("div");
+          content.className = "theme-transition-snapshot-content";
+          document.body.classList.forEach((className) => {
+            content.classList.add(className);
+          });
+          content.innerHTML = document.body.innerHTML;
+          content.querySelectorAll("script").forEach((script) => script.remove());
+          if (!snapshotIsDark) {
+            content.querySelectorAll("[class*='dark:']").forEach((el) => {
+              Array.from(el.classList).forEach((className) => {
+                if (className.startsWith("dark:")) {
+                  el.classList.remove(className);
+                }
+              });
+            });
+          }
+
+          const scrollY = window.scrollY || window.pageYOffset || 0;
+          content.style.transform = `translateY(${-scrollY}px)`;
+
+          snapshot.appendChild(content);
+          document.body.appendChild(snapshot);
+
+          requestAnimationFrame(() => {
+            snapshot.classList.add("is-active");
+          });
+
+          return () => snapshot.remove();
+        }
+
+        function createThemeGlow(nextIsDark) {
+          document
+            .querySelectorAll(".theme-transition-glow")
+            .forEach((glow) => glow.remove());
+
+          const glow = document.createElement("div");
+          glow.className = "theme-transition-glow";
+          glow.dataset.theme = nextIsDark ? "dark" : "light";
+          glow.setAttribute("aria-hidden", "true");
+          document.body.appendChild(glow);
+
+          requestAnimationFrame(() => {
+            glow.classList.add("is-active");
+          });
+
+          return () => glow.remove();
+        }
+
+        function toggleTheme() {
+          const currentIsDark = document.documentElement.classList.contains("dark");
+          const nextIsDark = !currentIsDark;
+          const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches;
+
+          document.documentElement.classList.add("theme-switching");
+
+          if (cleanupSnapshot) {
+            cleanupSnapshot();
+            cleanupSnapshot = null;
+          }
+          if (cleanupGlow) {
+            cleanupGlow();
+            cleanupGlow = null;
+          }
+
+          if (prefersReducedMotion) {
+            document.documentElement.classList.toggle("dark", nextIsDark);
+            localStorage.setItem("theme", nextIsDark ? "dark" : "light");
+            updateToggleState();
+            requestAnimationFrame(() => {
+              document.documentElement.classList.remove("theme-switching");
+            });
+            return;
+          }
+
+          cleanupSnapshot = createThemeSnapshot(currentIsDark);
+          cleanupGlow = createThemeGlow(nextIsDark);
+
+          const snapshot = document.querySelector(".theme-transition-snapshot");
+          if (!snapshot) {
+            document.documentElement.classList.toggle("dark", nextIsDark);
+            localStorage.setItem("theme", nextIsDark ? "dark" : "light");
+            updateToggleState();
+            return;
+          }
+
+          document.documentElement.classList.toggle("dark", nextIsDark);
+          localStorage.setItem("theme", nextIsDark ? "dark" : "light");
+          updateToggleState();
+
+          snapshot.addEventListener(
+            "animationend",
+            () => {
+              requestAnimationFrame(() => {
+                if (cleanupSnapshot) {
+                  cleanupSnapshot();
+                  cleanupSnapshot = null;
+                }
+                if (cleanupGlow) {
+                  cleanupGlow();
+                  cleanupGlow = null;
+                }
+                document.documentElement.classList.remove("theme-switching");
+              });
+            },
+            { once: true }
+          );
+        }
+
+        function bindThemeToggles() {
+          document.querySelectorAll(toggleSelector).forEach((button) => {
+            if (button.dataset.themeBound === "true") {
+              return;
+            }
+            button.dataset.themeBound = "true";
+            button.addEventListener("click", toggleTheme);
+          });
+          updateToggleState();
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", bindThemeToggles);
+        } else {
+          bindThemeToggles();
+        }
+      })();
+    </script>
+  </body>
+</html>

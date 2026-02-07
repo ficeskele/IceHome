@@ -1,0 +1,60 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import PostCard from "@/components/PostCard.astro";
+import Button from "@/components/Button.astro";
+import { getCollection } from "astro:content";
+import { useTranslation } from "@/i18n/utils";
+
+const locale = "zh";
+const t = useTranslation(locale);
+
+const posts = (
+  await getCollection("blog", (entry) =>
+    entry.data.locale === locale && !entry.data.draft
+  )
+)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<PageLayout title={t("home.title")} locale={locale}>
+  <!-- Hero -->
+  <section class="py-16 sm:py-24">
+    <div class="max-w-2xl space-y-6">
+      <p class="text-lg text-muted-foreground">{t("home.hero.greeting")}</p>
+      <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
+        {t("home.hero.name")}
+      </h1>
+      <p class="text-xl text-muted-foreground">
+        {t("home.hero.description")}
+      </p>
+      <div>
+        <Button href={`/${locale}/blog`}>{t("home.hero.cta")} &rarr;</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest posts -->
+  {posts.length > 0 && (
+    <section class="space-y-8">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight">{t("home.latest")}</h2>
+        <Button variant="ghost" href={`/${locale}/blog`}>
+          {t("home.viewAll")} &rarr;
+        </Button>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date}
+            tags={post.data.tags}
+            href={`/${locale}/blog/${post.id}`}
+            locale={locale}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+</PageLayout>

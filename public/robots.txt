@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://icehome.pages.dev/sitemap.xml

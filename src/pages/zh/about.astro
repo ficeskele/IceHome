@@ -1,0 +1,27 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import { useTranslation } from "@/i18n/utils";
+
+const locale = "zh";
+const t = useTranslation(locale);
+---
+
+<PageLayout title={t("about.title")} description={t("about.description")} locale={locale}>
+  <div class="max-w-2xl space-y-8">
+    <h1 class="text-4xl font-bold tracking-tight">{t("about.title")}</h1>
+    <div class="prose dark:prose-invert">
+      <p>
+        你好！我是一名熱愛構建 Web 應用的開發者。
+        我喜歡使用現代工具和框架來建立快速、易用且美觀的體驗。
+      </p>
+      <p>
+        本站使用 Astro 和 Tailwind CSS 構建，部署在 Cloudflare Pages 上。
+        支援中英文雙語，並提供深色模式切換。
+      </p>
+      <p>
+        歡迎瀏覽我的部落格和專案。如果想要聯絡我，
+        可以在 GitHub 上找到我。
+      </p>
+    </div>
+  </div>
+</PageLayout>

@@ -1,0 +1,52 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import Card from "@/components/Card.astro";
+import Badge from "@/components/Badge.astro";
+import { useTranslation } from "@/i18n/utils";
+
+const locale = "zh";
+const t = useTranslation(locale);
+
+const projects = [
+  {
+    title: "IceHome",
+    description: "使用 Astro、Tailwind CSS 和 Cloudflare Pages 構建的個人網站和部落格。",
+    tags: ["Astro", "Tailwind CSS", "i18n"],
+    url: "https://github.com",
+  },
+  {
+    title: "Project Alpha",
+    description: "一個具有即時功能和身分認證的全棧 Web 應用。",
+    tags: ["TypeScript", "React", "Node.js"],
+    url: "https://github.com",
+  },
+  {
+    title: "CLI Tool",
+    description: "一個用於自動化常見開發任務的命令列工具。",
+    tags: ["Rust", "CLI"],
+    url: "https://github.com",
+  },
+];
+---
+
+<PageLayout title={t("projects.title")} description={t("projects.description")} locale={locale}>
+  <div class="space-y-8">
+    <h1 class="text-4xl font-bold tracking-tight">{t("projects.title")}</h1>
+    <p class="text-lg text-muted-foreground">{t("projects.description")}</p>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project) => (
+        <Card href={project.url} class="block p-6">
+          <div class="flex flex-col gap-3">
+            <h3 class="text-xl font-semibold tracking-tight">{project.title}</h3>
+            <p class="text-sm text-muted-foreground">{project.description}</p>
+            <div class="flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <Badge>{tag}</Badge>
+              ))}
+            </div>
+          </div>
+        </Card>
+      ))}
+    </div>
+  </div>
+</PageLayout>

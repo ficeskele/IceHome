@@ -1,0 +1,49 @@
+---
+import type { Locale } from "@/i18n/locales";
+import { getLocalizedPath, useTranslation } from "@/i18n/utils";
+
+interface Props {
+  title: string;
+  description?: string;
+  locale: Locale;
+  image?: string;
+}
+
+const { title, description, locale, image } = Astro.props;
+const t = useTranslation(locale);
+
+const siteName = t("seo.siteName");
+const desc = description ?? t("seo.defaultDescription");
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://icehome.pages.dev");
+const otherLocale: Locale = locale === "en" ? "zh" : "en";
+const altPath = getLocalizedPath(Astro.url.pathname, otherLocale);
+const altUrl = new URL(altPath, Astro.site ?? "https://icehome.pages.dev");
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{title} | {siteName}</title>
+<meta name="description" content={desc} />
+<link rel="canonical" href={canonicalUrl.href} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Alternate language -->
+<link rel="alternate" hreflang={locale} href={canonicalUrl.href} />
+<link rel="alternate" hreflang={otherLocale} href={altUrl.href} />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content={`${title} | ${siteName}`} />
+<meta property="og:description" content={desc} />
+<meta property="og:url" content={canonicalUrl.href} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content={locale === "zh" ? "zh_CN" : "en_US"} />
+{image && <meta property="og:image" content={image} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={`${title} | ${siteName}`} />
+<meta name="twitter:description" content={desc} />
+{image && <meta name="twitter:image" content={image} />}
