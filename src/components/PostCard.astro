@@ -11,24 +11,36 @@ interface Props {
   tags: string[];
   href: string;
   locale: Locale;
+  image?: string;
 }
 
-const { title, description, date, tags, href, locale } = Astro.props;
+const { title, description, date, tags, href, locale, image } = Astro.props;
 ---
 
-<Card href={href} class="block p-6">
-  <div class="flex flex-col gap-2">
-    <div class="flex items-center gap-2 text-sm text-muted-foreground">
-      <time datetime={date.toISOString()}>{formatDate(date, locale)}</time>
-    </div>
-    <h3 class="text-xl font-semibold tracking-tight">{title}</h3>
-    <p class="text-muted-foreground line-clamp-2">{description}</p>
-    {tags.length > 0 && (
-      <div class="flex flex-wrap gap-2 mt-2">
-        {tags.map((tag) => (
-          <Badge>{tag}</Badge>
-        ))}
+<Card href={href} class="block overflow-hidden">
+  <div class="flex flex-col sm:flex-row-reverse">
+    {image && (
+      <div class="sm:w-48 sm:shrink-0">
+        <img
+          src={image}
+          alt={title}
+          class="h-48 w-full sm:h-full object-cover"
+        />
       </div>
     )}
+    <div class="flex flex-col gap-2 p-6 flex-1">
+      <div class="flex items-center gap-2 text-sm text-muted-foreground">
+        <time datetime={date.toISOString()}>{formatDate(date, locale)}</time>
+      </div>
+      <h3 class="text-xl font-semibold tracking-tight">{title}</h3>
+      <p class="text-muted-foreground line-clamp-2">{description}</p>
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-2">
+          {tags.map((tag) => (
+            <Badge>{tag}</Badge>
+          ))}
+        </div>
+      )}
+    </div>
   </div>
 </Card>

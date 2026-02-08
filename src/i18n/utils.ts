@@ -18,10 +18,26 @@ export function getLocalizedPath(
   targetLocale: Locale,
 ): string {
   const segments = pathname.split("/").filter(Boolean);
-  if (segments[0] === "en" || segments[0] === "zh") {
+  const hasLocalePrefix = segments[0] === "en" || segments[0] === "zh";
+  if (hasLocalePrefix) {
     segments[0] = targetLocale;
   } else {
     segments.unshift(targetLocale);
+  }
+
+  // For blog posts, switch between slug and slug-zh based on target locale.
+  if (segments[1] === "blog" && segments.length > 2) {
+    const lastIndex = segments.length - 1;
+    const slug = segments[lastIndex];
+    if (targetLocale === "zh") {
+      if (!slug.endsWith("-zh")) {
+        segments[lastIndex] = `${slug}-zh`;
+      }
+    } else {
+      if (slug.endsWith("-zh")) {
+        segments[lastIndex] = slug.slice(0, -3);
+      }
+    }
   }
   return "/" + segments.join("/");
 }
