@@ -43,9 +43,10 @@ const links = [
       <div class="flex items-center gap-1 md:hidden">
         <LanguageSwitcher />
         <ThemeToggle />
-        <label
-          for="mobile-menu"
-          class="inline-flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +62,7 @@ const links = [
               d="M3.75 9h16.5m-16.5 6.75h16.5"
             ></path>
           </svg>
-        </label>
+        </button>
       </div>
     </div>
   </Container>
@@ -71,7 +72,7 @@ const links = [
     {links.map((link) => (
       <a
         href={link.href}
-        class="text-lg font-medium text-foreground hover:text-muted-foreground transition-colors"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
       >
         {link.label}
       </a>
