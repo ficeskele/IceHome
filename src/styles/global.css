@@ -159,6 +159,10 @@ body {
   transition: none;
 }
 
+html {
+  font-size: 17px;
+}
+
 .theme-switching,
 .theme-switching * {
   transition: none !important;
